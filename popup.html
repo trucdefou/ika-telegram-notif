@@ -262,12 +262,21 @@
     </div>
 
     <div class="field">
+      <label>Bot Token</label>
+      <input type="text" id="botToken" placeholder="123456789:AAH...">
+      <div class="help-text">
+        1. Open Telegram → search <b>@BotFather</b><br>
+        2. Send <b>/newbot</b> and follow the steps<br>
+        3. Paste the token BotFather gives you here
+      </div>
+    </div>
+
+    <div class="field">
       <label>Your Telegram Chat ID</label>
       <input type="text" id="chatId" placeholder="123456789">
       <div class="help-text">
-        1. Open Telegram → search <a href="https://t.me/ikariam_benja_bot" target="_blank">@ikariam_benja_bot</a><br>
-        2. Tap <b>Start</b> and send any message<br>
-        3. Open <a href="https://api.telegram.org/bot8619128689:AAHKQl89carjhAF1b-3RMKI9eqUGIlrysyU/getUpdates" target="_blank">this link</a> → copy your <b>chat.id</b> number
+        1. Send any message to your bot<br>
+        2. <a id="getUpdatesLink" href="#" target="_blank">Open this link</a> → copy your <b>chat.id</b> number
       </div>
     </div>
 

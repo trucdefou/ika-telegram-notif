@@ -1,19 +1,22 @@
 // Background service worker
-// Bot token is fixed — shared by all users
-const BOT_TOKEN = '8619128689:AAHKQl89carjhAF1b-3RMKI9eqUGIlrysyU';
-const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type !== 'SEND_TELEGRAM') return false;
 
-  chrome.storage.sync.get(['chatId'], (config) => {
+  chrome.storage.sync.get(['botToken', 'chatId'], (config) => {
+    if (!config.botToken) {
+      console.warn('[Ikariam BG] No bot token — open extension popup to configure');
+      sendResponse({ ok: false, error: 'No bot token configured' });
+      return;
+    }
     if (!config.chatId) {
-      console.warn('[Ikariam BG] Not configured — open extension popup to set Chat ID');
-      sendResponse({ ok: false, error: 'Not configured' });
+      console.warn('[Ikariam BG] No chat ID — open extension popup to configure');
+      sendResponse({ ok: false, error: 'No chat ID configured' });
       return;
     }
 
-    fetch(TELEGRAM_API, {
+    const api = `https://api.telegram.org/bot${config.botToken}/sendMessage`;
+
+    fetch(api, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
