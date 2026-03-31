@@ -228,8 +228,8 @@
 
   function showStatusBanner() {
     // Check if configured first
-    chrome.storage.sync.get(['chatId'], (config) => {
-      const configured = !!config.chatId;
+    chrome.storage.sync.get(['botToken', 'chatId'], (config) => {
+      const configured = !!config.botToken && !!config.chatId;
 
       const banner = document.createElement('div');
       banner.id = 'ikariam-notifier-status';
@@ -299,8 +299,8 @@
       // Send startup message only once per session (not on every F5 reload)
       if (notifEnabled.startup && !sessionStorage.getItem('ikariamNotifierStarted')) {
         sessionStorage.setItem('ikariamNotifierStarted', '1');
-        chrome.storage.sync.get(['chatId'], (config) => {
-          if (config.chatId) {
+        chrome.storage.sync.get(['botToken', 'chatId'], (config) => {
+          if (config.botToken && config.chatId) {
             sendTelegram(
               `✅ <b>Ikariam Notifier conectado</b>\n` +
               `🌐 Servidor: ${getServer()}\n` +

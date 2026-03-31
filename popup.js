@@ -1,9 +1,22 @@
+const $botToken = document.getElementById('botToken');
 const $chatId = document.getElementById('chatId');
 const $save = document.getElementById('btnSave');
 const $test = document.getElementById('btnTest');
 const $msg = document.getElementById('savedMsg');
 const $status = document.getElementById('statusBar');
 const $statusText = document.getElementById('statusText');
+const $getUpdatesLink = document.getElementById('getUpdatesLink');
+
+// Update the getUpdates link dynamically as the user types the token
+function updateGetUpdatesLink() {
+  const token = $botToken.value.trim();
+  if (token) {
+    $getUpdatesLink.href = `https://api.telegram.org/bot${token}/getUpdates`;
+  } else {
+    $getUpdatesLink.removeAttribute('href');
+  }
+}
+$botToken.addEventListener('input', updateGetUpdatesLink);
 
 const $notifStartup  = document.getElementById('notifStartup');
 const $notifCities   = document.getElementById('notifCities');
@@ -55,20 +68,27 @@ function updateStatus(configured) {
 }
 
 // Load saved config
-chrome.storage.sync.get(['chatId', 'notifications'], (data) => {
+chrome.storage.sync.get(['botToken', 'chatId', 'notifications'], (data) => {
+  if (data.botToken) $botToken.value = data.botToken;
   if (data.chatId) $chatId.value = data.chatId;
-  updateStatus(!!data.chatId);
+  updateStatus(!!data.botToken && !!data.chatId);
   applyNotifPrefs(data.notifications);
+  updateGetUpdatesLink();
 });
 
 // Save
 $save.addEventListener('click', () => {
+  const botToken = $botToken.value.trim();
   const chatId = $chatId.value.trim();
+  if (!botToken) {
+    flash('Bot Token is required', '#f87171');
+    return;
+  }
   if (!chatId) {
     flash('Chat ID is required', '#f87171');
     return;
   }
-  chrome.storage.sync.set({ chatId: chatId, notifications: getNotifPrefs() }, () => {
+  chrome.storage.sync.set({ botToken, chatId, notifications: getNotifPrefs() }, () => {
     flash('✓ Saved');
     updateStatus(true);
   });
@@ -76,12 +96,17 @@ $save.addEventListener('click', () => {
 
 // Test
 $test.addEventListener('click', () => {
+  const botToken = $botToken.value.trim();
   const chatId = $chatId.value.trim();
+  if (!botToken) {
+    flash('Enter your Bot Token first', '#f87171');
+    return;
+  }
   if (!chatId) {
     flash('Enter your Chat ID first', '#f87171');
     return;
   }
-  chrome.storage.sync.set({ chatId: chatId });
+  chrome.storage.sync.set({ botToken, chatId });
 
   $test.textContent = 'Sending...';
   $test.disabled = true;
