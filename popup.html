@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 340px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f1923;
+      color: #e0e0e0;
+      padding: 0;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1a3a5c, #1e4d6e);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #2a5070;
+    }
+
+    .header img {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+    }
+
+    .header-text h1 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #daa520;
+    }
+
+    .header-text p {
+      font-size: 11px;
+      color: #8ab4d6;
+      margin-top: 2px;
+    }
+
+    .content {
+      padding: 16px;
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-bar.connected {
+      background: rgba(46, 160, 67, 0.15);
+      border: 1px solid rgba(46, 160, 67, 0.3);
+      color: #4ade80;
+    }
+
+    .status-bar.disconnected {
+      background: rgba(220, 60, 60, 0.15);
+      border: 1px solid rgba(220, 60, 60, 0.3);
+      color: #f87171;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .connected .status-dot { background: #4ade80; }
+    .disconnected .status-dot { background: #f87171; }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #8ab4d6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .field { margin-bottom: 14px; }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      background: #162230;
+      border: 1px solid #2a4060;
+      border-radius: 6px;
+      color: #e0e0e0;
+      font-size: 13px;
+      font-family: 'SF Mono', 'Consolas', monospace;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #daa520;
+    }
+
+    input[type="text"]::placeholder {
+      color: #4a6070;
+    }
+
+    .help-text {
+      font-size: 10.5px;
+      color: #5a7a90;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .help-text a {
+      color: #6aafcf;
+      text-decoration: none;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    button:hover { opacity: 0.85; }
+
+    #btnSave {
+      background: #daa520;
+      color: #0f1923;
+    }
+
+    #btnTest {
+      background: #2a4060;
+      color: #8ab4d6;
+      border: 1px solid #3a5575;
+    }
+
+    .saved-msg {
+      text-align: center;
+      font-size: 12px;
+      color: #4ade80;
+      margin-top: 10px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .saved-msg.show { opacity: 1; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #8ab4d6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+
+    .notif-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .notif-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: #162230;
+      border: 1px solid #2a4060;
+      border-radius: 6px;
+    }
+
+    .notif-item-label {
+      font-size: 12px;
+      color: #c0d8e8;
+    }
+
+    /* Toggle switch */
+    .toggle {
+      position: relative;
+      width: 34px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .toggle input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: #2a4060;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle input:checked + .toggle-track { background: #daa520; }
+
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+
+    .footer {
+      padding: 12px 16px;
+      border-top: 1px solid #1a2a3a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10.5px;
+      color: #4a6070;
+    }
+
+    .footer a {
+      color: #6aafcf;
+      text-decoration: none;
+    }
+
+    .footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="icon48.png" alt="icon">
+    <div class="header-text">
+      <h1>Ikariam Telegram Notifier</h1>
+      <p>Game alerts straight to Telegram</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div id="statusBar" class="status-bar disconnected">
+      <div class="status-dot"></div>
+      <span id="statusText">Not configured</span>
+    </div>
+
+    <div class="field">
+      <label>Your Telegram Chat ID</label>
+      <input type="text" id="chatId" placeholder="123456789">
+      <div class="help-text">
+        1. Open Telegram → search <a href="https://t.me/ikariam_benja_bot" target="_blank">@ikariam_benja_bot</a><br>
+        2. Tap <b>Start</b> and send any message<br>
+        3. Open <a href="https://api.telegram.org/bot8619128689:AAHKQl89carjhAF1b-3RMKI9eqUGIlrysyU/getUpdates" target="_blank">this link</a> → copy your <b>chat.id</b> number
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button id="btnSave">Save</button>
+      <button id="btnTest">Send Test</button>
+    </div>
+
+    <div class="section-title">Notificaciones</div>
+    <div class="notif-list">
+      <div class="notif-item">
+        <span class="notif-item-label">✅ Conectado (al iniciar sesión)</span>
+        <label class="toggle"><input type="checkbox" id="notifStartup" checked><span class="toggle-track"></span></label>
+      </div>
+      <div class="notif-item">
+        <span class="notif-item-label">🏛️ Ciudades</span>
+        <label class="toggle"><input type="checkbox" id="notifCities" checked><span class="toggle-track"></span></label>
+      </div>
+      <div class="notif-item">
+        <span class="notif-item-label">⚔️ Milicia (ataques)</span>
+        <label class="toggle"><input type="checkbox" id="notifMilitary" checked><span class="toggle-track"></span></label>
+      </div>
+      <div class="notif-item">
+        <span class="notif-item-label">🔬 Investigación</span>
+        <label class="toggle"><input type="checkbox" id="notifResearch" checked><span class="toggle-track"></span></label>
+      </div>
+      <div class="notif-item">
+        <span class="notif-item-label">🤝 Diplomacia</span>
+        <label class="toggle"><input type="checkbox" id="notifDiplomacy" checked><span class="toggle-track"></span></label>
+      </div>
+    </div>
+
+    <div class="saved-msg" id="savedMsg"></div>
+  </div>
+
+  <div class="footer">
+    <span>v3.1.0 by trucdefou</span>
+    <a href="https://github.com/trucdefou" target="_blank">GitHub</a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
