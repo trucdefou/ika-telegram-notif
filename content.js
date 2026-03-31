@@ -249,8 +249,8 @@
         border: 1px solid ${configured ? '#3a5a3a' : '#5a3a3a'};
       `;
       banner.textContent = configured
-        ? '🔔 TG Notifier activo'
-        : '⚠️ TG Notifier — click icono extensión para configurar';
+        ? '🔔 Notificación por Telegram activa'
+        : '⚠️ Notifación por Telegram — click icono extensión para configurar';
       banner.addEventListener('click', () => {
         banner.style.opacity = '0';
         setTimeout(() => banner.remove(), 300);
