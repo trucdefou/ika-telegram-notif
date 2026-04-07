@@ -65,10 +65,16 @@
     diplomacy: true,
   };
 
+  // Configured server code (empty = auto-detect from hostname)
+  let configuredServer = '';
+
   function loadNotifPrefs(callback) {
-    chrome.storage.sync.get(['notifications'], (data) => {
+    chrome.storage.sync.get(['notifications', 'serverCode'], (data) => {
       if (data.notifications) {
         Object.assign(notifEnabled, data.notifications);
+      }
+      if (data.serverCode) {
+        configuredServer = data.serverCode;
       }
       if (callback) callback();
     });
@@ -79,6 +85,10 @@
     if (changes.notifications) {
       Object.assign(notifEnabled, changes.notifications.newValue);
       log('🔧 Notification preferences updated:', notifEnabled);
+    }
+    if (changes.serverCode) {
+      configuredServer = changes.serverCode.newValue || '';
+      log('🔧 Server updated:', configuredServer || '(auto)');
     }
   });
 
@@ -99,7 +109,7 @@
   }
 
   function getServer() {
-    return window.location.hostname.split('.')[0];
+    return configuredServer || window.location.hostname.split('.')[0];
   }
 
   // ─── TELEGRAM ──────────────────────────────────────────────────────
