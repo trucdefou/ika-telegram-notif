@@ -1,5 +1,6 @@
 const $botToken = document.getElementById('botToken');
 const $chatId = document.getElementById('chatId');
+const $serverCode = document.getElementById('serverCode');
 const $save = document.getElementById('btnSave');
 const $test = document.getElementById('btnTest');
 const $msg = document.getElementById('savedMsg');
@@ -68,9 +69,10 @@ function updateStatus(configured) {
 }
 
 // Load saved config
-chrome.storage.sync.get(['botToken', 'chatId', 'notifications'], (data) => {
+chrome.storage.sync.get(['botToken', 'chatId', 'serverCode', 'notifications'], (data) => {
   if (data.botToken) $botToken.value = data.botToken;
   if (data.chatId) $chatId.value = data.chatId;
+  if (data.serverCode) $serverCode.value = data.serverCode;
   updateStatus(!!data.botToken && !!data.chatId);
   applyNotifPrefs(data.notifications);
   updateGetUpdatesLink();
@@ -80,6 +82,7 @@ chrome.storage.sync.get(['botToken', 'chatId', 'notifications'], (data) => {
 $save.addEventListener('click', () => {
   const botToken = $botToken.value.trim();
   const chatId = $chatId.value.trim();
+  const serverCode = $serverCode.value.trim();
   if (!botToken) {
     flash('Bot Token is required', '#f87171');
     return;
@@ -88,7 +91,7 @@ $save.addEventListener('click', () => {
     flash('Chat ID is required', '#f87171');
     return;
   }
-  chrome.storage.sync.set({ botToken, chatId, notifications: getNotifPrefs() }, () => {
+  chrome.storage.sync.set({ botToken, chatId, serverCode, notifications: getNotifPrefs() }, () => {
     flash('✓ Saved');
     updateStatus(true);
   });
