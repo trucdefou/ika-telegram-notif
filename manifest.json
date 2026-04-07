@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Ikariam Telegram Notifier",
   "description": "Sends Telegram notifications for Ikariam game events — attacks, diplomacy, research, and more.",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "author": "trucdefou",
   "homepage_url": "https://github.com/trucdefou",
   "permissions": ["storage"],
