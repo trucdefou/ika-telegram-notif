@@ -1,7 +1,7 @@
 # Ikariam Telegram Notifier 🔔
 
 Chrome extension that sends **Telegram notifications** when events happen in [Ikariam](https://ikariam.gameforge.com) — attacks, diplomacy, research, city alerts.
-
+Available at: https://chromewebstore.google.com/detail/ikariam-telegram-notifier/nfhkgdnndnjmpfeaknfcggelajplmnag
 ## Features
 
 - **🚨 Attack alerts** — Repeated urgent messages when your city is under attack
